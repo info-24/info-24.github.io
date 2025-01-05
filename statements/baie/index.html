@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problema Radu - Baia Perfectă</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .problem-description {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .input-output {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .restrictions {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Problema Radu - Baia Perfectă</h1>
+    </header>
+
+    <div class="content">
+        <div class="problem-description">
+            <h2>Descrierea Problemei</h2>
+            <p>
+                Nicușor în sfârșit ne-a dat apă caldă. Dar ce să vezi, și-a luat răzbunarea! Apa este mult prea caldă. Radu dorește să își facă o baie ca să învingă toți dușmanii. Ajută-l să își potrivească apa, astfel încât să nu se ardă.
+            </p>
+            <p>
+                Nicușor îi oferă apă caldă, cu temperatura <strong>h</strong>, și apă rece cu temperatura <strong>c</strong>. Radu vrea să își facă baie la temperatura <strong>t</strong> grade. Problema este că cada lui Radu are capacitatea de <strong>v</strong> litri, și fiindcă robinetul i s-a stricat, el are la dispoziție o găleată de <strong>k</strong>. Apa rece și apa caldă de asemenea au un preț de <strong>x</strong> respectiv <strong>y</strong> lei pe litru. Care este prețul minim pe care îl va plăti Radu ca să se spele la temperatura cea mai apropiată de cea dorită?
+            </p>
+        </div>
+
+        <div class="input-output">
+            <h2>Date de Intrare și Iesire</h2>
+            <p><strong>Date de intrare:</strong></p>
+            <ul>
+                <li>Pe prima linie a programului un număr de teste <strong>t</strong>.</li>
+                <li>Pe următoarele <strong>t</strong> linii, numerele <strong>c</strong>, <strong>h</strong>, <strong>x</strong>, <strong>y</strong>, <strong>t</strong>, <strong>v</strong>, <strong>k</strong> cu semnificația din enunț, separate de câte un spațiu.</li>
+            </ul>
+
+            <p><strong>Date de ieșire:</strong></p>
+            <ul>
+                <li>Pe prima linie, răspunsul, în lei.</li>
+            </ul>
+        </div>
+
+        <div class="restrictions">
+            <h2>Restricții și Precizări</h2>
+            <ul>
+                <li>Nicușor nu își va face de cap cu robinetele în timp ce se umple cada.</li>
+                <li><strong>1 &lt; c &lt; h &lt; 1.000.000</strong></li>
+                <li><strong>c &lt; t &lt; h</strong></li>
+                <li><strong>1 &lt; v &lt; 1.000.000</strong></li>
+                <li><strong>1 &lt; k &lt; v &lt; 1.000.000</strong></li>
+                <li><strong>1 &lt; t &lt; 1.000</strong></li>
+                <li><strong>Gălețile nu se pot umple parțial.</strong></li>
+                <li><strong>Baia nu se poate umple mai multe decât încape. Adică dacă v = 7 și k = 2, se va umple doar până la 6L</strong></li>
+                <li><strong>Radu poate umple fiecare găleată cu un singur tip de apă (caldă sau rece).</strong></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
