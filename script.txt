@@ -1,0 +1,32 @@
+Salut colegi,
+V-ați imaginat vreodată cum ar fi să creați propriile videoclipuri care să devină virale pe YouTube? Azi vă arăt cum să transformați ideea voastră în realitate!  Care sunt etapele realizarii unui videoclip? Planificare, filmare, editare și distribuire.
+  1. Planificare:
+  În primul rând trebuie să decizi subiectul și scopul filmului tău. De exemplu, hai să facem un video despre Japonia. Acum știm subiectul. Scopul lui este de a invata publicul despre Japonia, într-un format amuzant și atractiv. Acum că știm ce vrem, scriem un script. În script scriem tot ce se va întâmpla în film. Tot ce vom spune, tot ce vom face sau arăta. Uite cum ar arăta un script: (). Apoi, trebuie să pregătim setul de filmare, în cazul nostru, un perete alb și diverse obiecte pe care le vom arata in film, adica recuzita. Puneți lumină, dar ideal să nu vă băgați în ochi o lumină de 1000 de lumeni. Puteți folosi lumină naturală sau chiar niște lămpi din casa. Luminile nu trebuie să fie prea puternice sau prea slabe, Acum trecem la partea practica ...
+  2. Filmarea
+  Nu ai nevoie de un satelit NASA ca să faci filmulețe, poți folosi și telefonul. Dar dacă ai noroc, poate îți dau parintii camera lor. Doar să nu o scapi. Poți să te filmezi singur cu un selfie stick, să iei un trepied sau să rogi pe cineva să te filmeze, dacă ai prieteni. Pronunță clar scriptul cu intonație și entuziasm sau tristete sau frustrare in functie de starea pe care vrei sa o transmiti. Daca ideile nu suna bine intonate poti sa mai modifici scriptul și dacă vrei să spui altceva, schimbă întâi scriptul ca sa nu pierzi logica, sa ai rupturi de idei. Asigură-te că nu ai făcut vreo greșeală, ca să nu te corecteze vreo coleg. Dacă ții camera în mână, tine camera drept si nu o mișca. Daca mergi, incearca sa-ti tii bazinul fix, si sa nu te duci in sus si-n jos. Tine mainile pe langa corp si incearca sa mergi ca pe varfuri. Asigura-te ca nu bate vantul in microfon daca este cazul ca să nu spargi timpanele la sufletele care folosesc căști.
+  Exista mai multe tipuri de incadrari (planuri):
+  Planul detaliu: Un detaliu al unui personaj. De exemplu ochiul personajului.
+  Prim-plan: Se arata fata subiectului (cam ca in poza de buletin). 
+  Plan mediu: De la talie în sus, bun pentru conversații sau prezentări.
+  Plan american: Pana la genunchi. Era folosit pentru a arata cowboii si armele lor din mana.
+  Plan întreg: Tot personajul, ideal pentru a prezenta mișcări sau acțiuni.
+  Plan general: Prezintă și personajul, și împrejurările
+  Și plan general larg: Unde se vede tot peisajul, subiectul este neimportant.
+Intr-un film este bine sa folosesti toate aceste tipuri de cadre astfel incat sa nu plictisesti cu un singur plan.
+  Nu ezita sa tragi de mai multe ori un cadru daca nu-ti iese, eu trag de mai multe ori acelasi clip si-l aleg pe cel mai bun.
+  3. Editare
+  Acum ca ai toate cadrele trase, trebuie sa le contopesti intr-un singur video cu un program de editare video. Poti edita cu orice editor vrei sau ai la îndemână, dar eu recomand DaVinci Resolve, care este folosit și la nivel profesional și are si o versiune care nu costa nimic, puteți folosi Premiere Pro ca mine (doar nu-i spune lui tati cât costă) sau iMovie, FinalCut sau LumaFusion. Toate editoarele au niște funcții comune: Poți lua clipurile pe care le-ai filmat și să le insiruiesti într-un timeline.
+ În timeline pune părți din clipurile filmate, si stergem capetele. Dupa ce asezam toate clipurile in timeline si le vedem legate putem adauga muzica, efecte de sunet si text. 
+
+Putem insera și tranziții între clipuri, dar nu le recomand, deoarece sunt cringe sau vetust adica demodat. 
+Ziceam de efectele de sunet. Un site bun pentru a downloada sunete este myinstats.com. Arati cum downloadezi si apoi cum il pui in timeline.
+Muzica gratis poti folosi din Youtube library a folosi apoi pe Youtube. Fiecare platforma are de obicei o librarie de muzica moca. Foloseste doar astfel de muzica, daca adaugi muzica la care nu ai drepturi o sa fie blocata de platforma pe care vei publica. 
+ 
+Nu uita să adăugi și text dacă dorești, și poți pune și imagini sugestive peste video. 
+
+Dupa ce revedem clipul video de mai multe ori putem face mici corectii daca este cazul. De obicei este. Adica poate mai este nevoie de filmat un cadru de care simti ca  ar fi nevoie, sau adauga idei noi. De multe ori iti vor veni idei noi abia dupa ce vezi intregul videoclip. Este normal sa refaci sau sa adaugi. Nu trebuie sa te frustreze asta.
+
+  4. Distribuire
+  Acum că avem videoul nostru, de obicei sub formă de mp4, îl putem arăta celorlalți ca să vadă ce skilluri de editare avem. Putem posta pe Youtube de exemplu. Intri pe contul de Youtube, uploadați videoul și creați un thumbnail în Paint sau Photoshop. Adaugă o descripție și aproximativ 10 hashtaguri legate de video... Nu prea multe. Atenție, evită să folosești muzica altora, puteți vedea aici dacă aveți probleme. Dacă vrei să limitezi accesul, poți da pe unlisted. Nu o să apară la căutări, dar îl putem accesa pe link. Eu, de exemplu nu vreau să-mi amestec proiectele de școală cu restul conținutului făcut de mine, așa că dau pe unlisted. 
+  Acum știți cum să creați propriul video! Cine știe, poate unul dintre voi va deveni următorul influencer de pe YouTube.
+ Eu sunt Andrei de la 7A, succes și spor la facut clipuri video!
