@@ -1,0 +1,34 @@
+{
+    "name" : "Adunare",
+    "id" : "1",
+    "author" : "Iacob Andrei",
+    "editor" : "Iacob Andrei",
+    "source" : "Folclor",
+    "time" : "0.1s",
+    "memory" : "32MB",
+    "I/O" : "stdio",
+    "difficulty" : "Testare",
+    "body" : "Se adună două numere.",
+    "tasks" : [
+        "Să se afișeze suma celor două numere.",
+        "Să se afișeze suma cifrelor sumei celor două numere."
+    ],
+    "input" : "Pe prima linie se află un număr $C \\in \\{1, 2\\}$, reprezentând nr. cerinței. Pe a doua linie se află două numere naturale $A$ și $B$.",
+    "output" : "Pe a doua linie se va afișa răspunsul la acea cerință.",
+    "constraints" : [
+        "$0 \\leq A, B \\leq 100000$",
+        "Numerele $A$, $B$ nu vor fi prime."
+    ],
+    "examples" : [
+        {
+            "input" : "1\n12 52",
+            "output" : "64",
+            "clarification" : "Suma lor este: $12 + 52 = 64$"
+        },
+        {
+            "input" : "2\n12 52",
+            "output" : "10",
+            "clarification" : "Suma lor este: $12 + 52 = 64$, iar suma cifrelor este $6 + 4 = 10$"
+        }
+    ]
+}
