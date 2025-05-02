@@ -7,8 +7,8 @@
     "time" : "0.1s",
     "memory" : "32MB",
     "I/O" : "stdio",
-    "difficulty" : "Testare",
-    "body" : "Se adună două numere.",
+    "difficulty" : "Imposibil",
+    "body" : "  Gigel de abia a reușit să treacă de grădiniță, și acum este în clasa pregătitoare. Educatoarea lui a prezentat o operație matematică de nemaipomenit: Adunarea! Gigel a primit două numere și i se cere suma lor, dar acesta este un concept care îi depășește capacitatea intelectuală.",
     "tasks" : [
         "Să se afișeze suma celor două numere.",
         "Să se afișeze suma cifrelor sumei celor două numere."
