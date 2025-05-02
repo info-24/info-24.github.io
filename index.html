@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>info-24</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+New&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000000;
+            color: #aaffaa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            min-height: 100vh;
+            text-align: center; /* Center logo text */
+        }
+    
+        h1 {
+            color: #aaffaa;
+            font-size: 3em; /* Make the logo big */
+            margin-bottom: 30px;
+        }
+    
+        table {
+            width: 80%; /* Make the table take up a good portion of the width */
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: #aaffaa;
+            table-layout: fixed; /* Ensure columns have equal width */
+        }
+    
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #aaffaa;
+            width: 50%; /* Make both columns take equal width */
+        }
+    
+        th {
+            background-color: #111111; /* Darker header background */
+            font-weight: bold;
+        }
+    
+        tbody tr:nth-child(even) {
+            background-color: #1a1a1a; /* Slightly lighter for even rows */
+        }
+    
+        tbody tr:nth-child(odd) {
+            background-color: #000000; /* Match body background for odd rows */
+        }
+    
+        tr:hover {
+            background-color: #222222; /* Slightly lighter on hover */
+        }
+    
+        /* Style for the clickable row */
+        tr {
+            display: table-row; /* Ensure row behaves as a table row */
+        }
+    
+        a {
+            color: #aaffaa;
+            text-decoration: none;
+            display: flex; /* Use flex to make the link fill the row */
+            width: 100%;
+        }
+    
+        a > td {
+            display: block; /* Make the table cells within the link behave as blocks */
+            width: 50%; /* Maintain column widths */
+        }
+    
+        a:hover {
+            color: #ccffcc;
+        }
+    
+    </style>
+</head>
+<body>
+    <h1>info-24</h1>
+
+    <table id="problem-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nume Problemă</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+
+    <script>
+fetch('./problems.json')
+    .then(response => response.json())
+    .then(data => {
+        const problemTableBody = document.getElementById('problem-table').getElementsByTagName('tbody')[0];
+
+        data.problems.forEach(problem => {
+            const row = problemTableBody.insertRow();
+            row.onclick = () => window.location.href = `problem?ID=${problem.id}`;
+
+            const idCell = row.insertCell();
+            const nameCell = row.insertCell();
+
+            idCell.textContent = problem.id;
+            nameCell.textContent = problem.name;
+        });
+    })
+    .catch(error => console.error('Error loading problems:', error));
+
+    </script>
+</body>
+</html>
