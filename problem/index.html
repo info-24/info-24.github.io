@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title"></title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000000; /* Dark background */
+            color: #aaffaa; /* Bright green text */
+            margin: 0;
+            padding: 20px; /* Add general body padding */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #000000; /* Match container background */
+            padding: 20px; /* Add padding inside the container */
+            border-left: 2px solid #aaffaa; /* Green sidebar line */
+            flex-grow: 1;
+            margin-left: 150px; /* Space for the sidebar */
+            padding-top: 20px; /* Reduced top padding for visual balance */
+            overflow-y: auto; /* Enable vertical scrolling if content overflows */
+            /* border: 1px solid #aaffaa; Remove the outline */
+        }
+
+        h1, h2 {
+            color: #aaffaa;
+            border-bottom: 1px solid #aaffaa;
+            padding-bottom: 5px;
+            margin-top: 20px;
+            padding-right: 10px; /* Add some right padding to headings */
+        }
+
+        h1:first-child {
+            margin-top: 0;
+        }
+
+        .sidebar {
+            background-color: #111111; /* Darker sidebar background */
+            color: #aaffaa;
+            width: 130px;
+            padding: 20px; /* Add padding inside the sidebar */
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            overflow-y: auto; /* Enable vertical scrolling for the sidebar too */
+            border: 1px solid #aaffaa; /* Outline */
+        }
+
+        .sidebar p {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            padding-right: 10px; /* Add some right padding to sidebar text */
+        }
+
+        .sidebar strong {
+            color: #ccffcc; /* Slightly brighter green for emphasis */
+        }
+
+        .example {
+            background-color: #111111; /* Darker code block background */
+            color: #aaffaa;
+            padding: 20px; /* Increased padding */
+            border-left: 3px solid #aaffaa;
+            margin-top: 15px;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            border: 1px solid #aaffaa; /* Outline */
+        }
+
+        ul {
+            padding-left: 20px;
+            color: #aaffaa;
+            padding-right: 10px; /* Add some right padding to lists */
+        }
+
+        li {
+            margin-bottom: 5px;
+            padding-right: 10px; /* Add some right padding to list items */
+        }
+
+        p {
+            padding-right: 10px; /* Add some right padding to paragraphs */
+        }
+
+        /* Custom scrollbar for WebKit browsers (Chrome, Safari) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #111111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #aaffaa;
+            border-radius: 0px !important; /* Forcefully make it rectangular */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #ccffcc; /* Slightly lighter green on hover */
+        }
+
+        /* Custom scrollbar for Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #aaffaa #111111;
+        }
+    </style>
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 style="border-bottom: none; margin-top: 0;">Metadata</h2>
+        <p><strong>ID:</strong> <span id="problem-id"></span></p>
+        <p><strong>Autor:</strong> <span id="author"></span></p>
+        <p><strong>Editor:</strong> <span id="editor"></span></p>
+        <p><strong>Sursă:</strong> <span id="source"></span></p>
+        <p><strong>Timp:</strong> <span id="time"></span></p>
+        <p><strong>Memorie:</strong> <span id="memory"></span></p>
+        <p><strong>I/O:</strong> <span id="io"></span></p>
+        <p><strong>Dificultate:</strong> <span id="difficulty"></span></p>
+    </div>
+
+    <div class="container">
+        <h1 id="name"></h1>
+        <h2>Descriere</h2>
+        <p id="body"></p>
+
+        <h2>Cerințe</h2>
+        <ul id="tasks"></ul>
+
+        <h2>Intrare</h2>
+        <p id="input"></p>
+
+        <h2>Ieșire</h2>
+        <p id="output"></p>
+
+        <h2>Constrângeri</h2>
+        <ul id="constraints"></ul>
+
+        <h2>Exemple</h2>
+        <div id="examples"></div>
+    </div>
+
+    <script>
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+         }
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        const problemID = getUrlParameter('ID');
+        const jsonPath = problemID ? `./metadata/${problemID}/meta.json` : './metadata/1/meta.json';
+
+        fetch(jsonPath)
+            .then(response => response.json())
+            .then(jsonData => {
+                document.title = jsonData.name;
+                document.getElementById("name").textContent = jsonData.name;
+                document.getElementById("problem-id").textContent = jsonData.id;
+                document.getElementById("author").textContent = jsonData.author;
+                document.getElementById("editor").textContent = jsonData.editor;
+                document.getElementById("source").textContent = jsonData.source;
+                document.getElementById("time").textContent = jsonData.time;
+                document.getElementById("memory").textContent = jsonData.memory;
+                document.getElementById("io").textContent = jsonData["I/O"];
+                document.getElementById("difficulty").textContent = jsonData.difficulty;
+                document.getElementById("body").innerHTML = jsonData.body; // Use innerHTML to allow LaTeX
+                const tasksList = document.getElementById("tasks");
+                jsonData.tasks.forEach(task => {
+                    let li = document.createElement("li");
+                    li.innerHTML = task; // Use innerHTML to allow LaTeX
+                    tasksList.appendChild(li);
+                });
+
+                document.getElementById("input").innerHTML = jsonData.input; // Use innerHTML to allow LaTeX
+                document.getElementById("output").innerHTML = jsonData.output; // Use innerHTML to allow LaTeX
+
+                const constraintsList = document.getElementById("constraints");
+                jsonData.constraints.forEach(constraint => {
+                    let li = document.createElement("li");
+                    li.innerHTML = constraint; // Use innerHTML to allow LaTeX
+                    constraintsList.appendChild(li);
+                });
+
+                const examplesDiv = document.getElementById("examples");
+                jsonData.examples.forEach(example => {
+                    let div = document.createElement("div");
+                    div.classList.add("example");
+                    div.innerHTML = `<strong>Input:</strong><br><pre>${escapeHtml(example.input)}</pre><br><strong>Output:</strong><br><pre>${escapeHtml(example.output)}</pre><br><strong>Explicație:</strong> ${example.clarification}`;
+                    examplesDiv.appendChild(div);
+                });
+
+                // After the content is loaded, typeset any LaTeX
+                MathJax.typesetPromise()
+                  .then(() => console.log('LaTeX typeset successfully'));
+            })
+            .catch(error => console.error('Eroare la încărcarea JSON:', error));
+</script>
+
+</body>
+</html>
