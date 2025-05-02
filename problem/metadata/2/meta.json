@@ -1,0 +1,33 @@
+{
+    "name" : "Baie",
+    "id" : "2",
+    "author" : "Iacob Andrei",
+    "editor" : "Iacob Andrei",
+    "source" : "Folclor",
+    "time" : "0.1s",
+    "memory" : "32MB",
+    "I/O" : "stdio",
+    "difficulty" : "Medie",
+    "body" : "Nicușor în sfârșit ne-a dat apă caldă. Dar ce să vezi, și-a luat răzbunarea! Apa este mult prea caldă. Radu dorește să își facă o baie ca să învingă toți dușmanii. Ajută-l să își potrivească apa, astfel încât să nu se ardă.\n\nNicușor îi oferă apă caldă, cu temperatura $h$, și apă rece cu temperatura $c$. Radu vrea să își facă baie la temperatura $t$ grade. Problema este că cada lui Radu are capacitatea de $v$ litri, și fiindcă robinetul i s-a stricat, el are la dispoziție o găleată de $k$. Apa rece și apa caldă de asemenea au un preț de $x$ respectiv $y$ lei pe litru. Cât va plăti Radu pentru a face baie la temperatura cea mai apropiată de temperatura optimă? Dacă există  mai multe opțiuni se va alege opțiunea cu prețul minim.",
+    "input" : "Pe prima linie a programului un număr de teste $n$.\nPe următoarele $t$ linii, numerele $c$, $h$, $x$, $y$, $t$, $v$, $k$ cu semnificația din enunț, separate de câte un spațiu.",
+    "output" : "Pe prima linie, răspunsul, în lei.",
+    "constraints" : [
+        "$1 < c < h < 1.000.000$",
+        "$c < t < h$",
+        "$1 < v < 1.000.000$",
+        "$1 < k < v < 1.000.000$",
+        "$1 < n < 1.000$",
+        "Gălețile nu se pot umple parțial sau amestecat, de asemenea o dată ce apa este introdusă în cadă nu poate fi scoasă.",
+        "Baia nu se poate umple mai multe decât încape. Adică dacă $v = 7$ și $k = 2$, se va umple doar până la $6L$.",
+        "Radu poate umple fiecare găleată cu un singur tip de apă (caldă sau rece).",
+        "Radu este un dac adevărat, poate ridica orice găleată.",
+        "Nicușor nu se va juca la robinete în timp ce umple Radu cada sa."
+    ],
+    "examples" : [
+        {
+            "input" : "1\n30 70 2 3 50 10 3",
+            "output" : "Minimum cost calculated",
+            "clarification" : "Se determină cantitatea optimă de apă rece și caldă astfel încât temperatura să fie cât mai apropiată de cea dorită, iar costul să fie minim."
+        }
+    ]
+}
