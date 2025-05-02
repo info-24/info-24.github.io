@@ -1,0 +1,35 @@
+{
+    "name" : "Factorial",
+    "id" : "4",
+    "author" : "Iacob Andrei",
+    "editor" : "Iacob Andrei",
+    "source" : "Folclor",
+    "time" : "0.1s",
+    "memory" : "32MB",
+    "I/O" : "stdio",
+    "difficulty" : "Ușor",
+    "body" : " Gigel, un renumit matematician, vrea să calculeze factorialii la numere foarte mari. El primește un număr $N$ și vrea să afle informații despre $N!$. Factorialul unui număr, notat cu $N!$ este definit ca produsul tuturor numerelor naturale nenule mai mici decât el. De exemplu: $5! = 1 * 2 * 3 * 4 * 5 = 120$",
+    "tasks" : [
+        "Să se afișeze prima cifră a numărului $N!$.",
+        "Să se afișeze ultima cifră nenulă a numărului $N!$.",
+        "Să se afișeze numărul total de cifre a numărului $N!$.",
+	"Să se afișeze numărul de zerouri consecutive de la finalul numărului $N!$."
+    ],
+    "input" : "Pe a prima linie se află un număr natural $N$.",
+    "output" : "Pe următoarele 4 linii se afișează răspunsul la fiecare cerință, în ordine.",
+    "constraints" : [
+        "$N \\leq 10000$"
+    ],
+    "examples" : [
+        {
+            "input" : "5",
+            "output" : "1\n2\n3\n1",
+            "clarification" : "$5! = 120$"
+        },
+        {
+            "input" : "10",
+            "output" : "1\n8\n7\n2\n",
+            "clarification" : "$10! = 3628800$"
+        }
+    ]
+}
