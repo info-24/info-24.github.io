@@ -2,6 +2,7 @@
     "problems": [
         { "id": "1", "name": "Adunare" },
         { "id": "2", "name": "Baie" },
-        { "id": "3", "name": "Chimie" }
+        { "id": "3", "name": "Chimie" },
+        { "id": "4", "name": "Factorial" }
     ]
 }
