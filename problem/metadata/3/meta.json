@@ -3,7 +3,7 @@
     "id" : "3",
     "author" : "Iacob Andrei",
     "editor" : "Iacob Andrei",
-    "source" : "Plictiseala din ora de chimie",
+    "source" : "Dragul chimiei",
     "time" : "0.1s",
     "memory" : "32MB",
     "I/O" : "stdio",
@@ -16,7 +16,6 @@
     "output" : "Dimensiunea celei mai mari grupe care respectă criteriul.",
     "constraints" : [
         "Programul va avea o complexitate de timp de $O(N)$",
-        "Doamna de Chimie nu va mânca elevii.",
         "$1 \\leq n \\leq 100.000$",
         "$1 \\leq k \\leq 100.000$",
         "$1 \\leq IQ \\leq 1.000$"
