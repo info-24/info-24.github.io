@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Factorial</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1, h2, h3 {
+      color: #004080;
+    }
+    p {
+      line-height: 1.6;
+    }
+    code {
+      background-color: #eaeaea;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    ul, ol {
+      margin: 15px 0;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 5px;
+    }
+    pre {
+      background-color: #eaeaea;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Factorial</h1>
+
+    <h2>Enunțul problemei</h2>
+    <p>
+      Lui Gigel, un renumit matematician, are o mare pasiune pentru factoriali și are nevoie de ajutorul vostru pentru a calcula valoarea factorialului unui număr, deoarece rezultatele devin extrem de mari. Factorialul unui număr <em>X</em> este definit ca produsul tuturor numerelor naturale nenule mai mici sau egale cu <em>X</em>.
+    </p>
+    <p>
+      Pentru un număr <em>X</em> dat, Gigel dorește să afle:
+    </p>
+    <ol>
+      <li>Prima cifră a lui <em>X!</em>.</li>
+      <li>Ultima cifră a lui <em>X!</em>.</li>
+      <li>Numărul total de cifre din <em>X!</em> (calculationul poate avea o marjă de eroare de 5%).</li>
+      <li>Numărul de zerouri consecutive de la finalul lui <em>X!</em>.</li>
+    </ol>
+
+    <h2>Date de intrare</h2>
+    <p>
+      Se va citi din <code>stdin</code> un număr natural <em>X</em>.
+    </p>
+
+    <h2>Date de ieșire</h2>
+    <p>
+      Programul trebuie să afișeze pe patru linii:
+    </p>
+    <ul>
+      <li><strong>Linia 1:</strong> Prima cifră a lui <em>X!</em>.</li>
+      <li><strong>Linia 2:</strong> Ultima cifră a lui <em>X!</em>.</li>
+      <li><strong>Linia 3:</strong> Numărul total de cifre ale lui <em>X!</em>, cu o marjă de eroare de 5%.</li>
+      <li><strong>Linia 4:</strong> Numărul de zerouri consecutive de la finalul lui <em>X!</em>.</li>
+    </ul>
+
+    <h2>Restricții și Precizări</h2>
+    <ul>
+      <li>Pentru 10% din punctaj: <em>X &le; 20</em>.</li>
+      <li><em>0! = 1</em>.</li>
+      <li>Pentru 90% din punctaj: <em>20 &lt; X &le; 7000</em>.</li>
+    </ul>
+
+    <h2>Exemplu și Explicații</h2>
+    <p>
+      Pentru a ilustra, să considerăm ca input <code>5</code>.
+    </p>
+    <p>
+      Calculăm factorialul:
+    </p>
+    <ul>
+      <li><strong>5! = 1 × 2 × 3 × 4 × 5 = 120</strong></li>
+    </ul>
+    <p>
+      Astfel, avem:
+    </p>
+    <ol>
+      <li><strong>Prima cifră:</strong> Prima cifră a lui 120 este <code>1</code>.</li>
+      <li><strong>Ultima cifră:</strong> Ultima cifră a lui 120 este <code>0</code> (deoarece 120 se termină cu zero).</li>
+      <li><strong>Numărul de cifre:</strong> 120 are <code>3</code> cifre.</li>
+      <li><strong>Numărul de zerouri la final:</strong> 120 are <code>1</code> zero la final.</li>
+    </ol>
+    <p>
+      Deci, pentru input-ul <code>5</code>, ieșirea așteptată este:
+    </p>
+    <pre>
+1
+0
+3
+1
+    </pre>
+  </div>
+</body>
+</html>
