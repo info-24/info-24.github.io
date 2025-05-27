@@ -1,0 +1,29 @@
+{
+    "name" : "Radu",
+    "id" : "6",
+    "author" : "Iacob Andrei",
+    "editor" : "Iacob Andrei",
+    "source" : "Folclor",
+    "time" : "1s",
+    "memory" : "64MB",
+    "I/O" : "radu.in/radu.out",
+    "difficulty" : "Ușor",
+    "body" :  "Radu a devenit un cosmonaut și trebuie să introducă un cod Y pentru a decola. Afișajul are inițial un număr X. Pentru a decola, el trebuie să folosească două taste:
+  A. Se ia numărul curent de pe afișaj și se ridică la puterea 2.
+  B. Se adună numărul 1 pe afișaj.",
+    "tasks" : [
+        "Care este numărul minimi de apăsări pe care trebuie să le efectueze?"
+    ],
+    "input" : "Pe prima linie, două nr. nat. distincte $X$, $Y$.",
+    "output" : "Pe prima linie va fi răspunsul cerinței.",
+    "constraints" : [
+        "$X, Y \\leq 1000000000000$"
+    ],
+    "examples" : [
+        {
+            "input" : "2 18",
+            "output" : "4",
+            "clarification" : "Se apasă AABB"
+        }
+    ]
+}
