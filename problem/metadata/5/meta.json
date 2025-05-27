@@ -1,0 +1,28 @@
+{
+    "name" : "Atletism",
+    "id" : "5",
+    "author" : "Iacob Andrei",
+    "editor" : "Iacob Andrei",
+    "source" : "Folclor",
+    "time" : "1s",
+    "memory" : "64MB",
+    "I/O" : "atletism.in/atletism.out",
+    "difficulty" : "Ușor",
+    "body" : "    Un alergător participă la un concurs de atletism la proba de $L$ metri. Pentru fiecare metru, el are o viteză de $V$ km/h, specificată de noi.",
+    "tasks" : [
+        "Care este intervalul de $S$ metri cu viteza medie cea mai mare?"
+    ],
+    "input" : "Pe prima linie se află nr. nat. $L$ și $S$. Pe a doua linie vor fi $L$ numere float.",
+    "output" : "Răspunsul, cu două zecimale de precizie.",
+    "constraints" : [
+        "$0 \\leq L, S \\leq 100000$",
+        "Vitezele vor fi numere raționale pozitive cu 2 cifre după virgulă"
+    ],
+    "examples" : [
+        {
+            "input" : "5 3\n5.00 6.00 5.00 7.00 3.00",
+            "output" : "6.00",
+            "clarification" : "Se face media aritmetică a vitezelor 6.00, 5.00 și 7.00."
+        }
+    ]
+}
