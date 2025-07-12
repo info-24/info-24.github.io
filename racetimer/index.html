@@ -99,6 +99,7 @@
       <span id="pace">Pace: 0.00s/lap</span>
       <span id="minPerKm">min/km: 0.00</span>
       <span id="kmph">km/h: 0.00</span>
+      <span id="laps">Laps left: 150</span>
     </div>
   </div>
 
@@ -253,6 +254,7 @@ function updateDisplay() {
     pace.textContent = `Last Lap Pace: ${formatMinSecCc(lastLap)} min/km`;
     const avgPaceSecPerKm = (avgLap / 20) * 1000;
     minPerKmDisplay.textContent = `Avg min/km: ${formatMinSecCc(avgPaceSecPerKm)}`;
+    laps.textContent = `Laps: ${lapTimes.length}`;
     
     const speedMps = 20 / lastLap;
     const kmph = speedMps * 3.6;
