@@ -1,0 +1,255 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lap Timer</title>
+<style>
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212; color: #eee; display: flex; flex-direction: column; height: 100vh;
+  }
+  #top {
+    display: flex; justify-content: space-between; padding: 15px; background: #1f1f1f; box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+  }
+  #videoContainer {
+    position: relative; width: 320px; height: 240px; border: 3px solid #444; border-radius: 8px; overflow: hidden;
+  }
+  #video {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 8px;
+  }
+  #centerLine {
+    position: absolute; top: 0; left: 50%; width: 3px; height: 100%; background: #ff4136; opacity: 0.8;
+    pointer-events: none; transform: translateX(-50%);
+  }
+  #stats {
+    display: flex; flex-direction: column; justify-content: center; width: 300px; background: #222;
+    border-radius: 8px; padding: 20px; box-shadow: 0 0 10px #ff4136aa;
+  }
+  #stats > div {
+    margin-bottom: 12px; font-size: 1.1rem; letter-spacing: 0.02em;
+  }
+  #status {
+    font-weight: 700; font-size: 1.3rem; margin-bottom: 16px; color: #ff4136;
+  }
+  #lapTableContainer {
+    flex: 1; overflow-y: auto; background: #1f1f1f; margin: 15px; border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 65, 54, 0.5);
+  }
+  table {
+    width: 100%; border-collapse: collapse; color: #eee;
+  }
+  thead {
+    background: #ff4136;
+    color: #fff;
+    font-weight: 600;
+  }
+  th, td {
+    padding: 10px 15px; text-align: center;
+    border-bottom: 1px solid #333;
+  }
+  tr:nth-child(even) {
+    background: #2c2c2c;
+  }
+  #controls {
+    padding: 15px; background: #222; display: flex; justify-content: center; align-items: center;
+    gap: 10px;
+  }
+  input[type=number] {
+    width: 70px; padding: 6px 10px; font-size: 1rem; border-radius: 4px; border: none; text-align: center;
+  }
+  button {
+    padding: 8px 18px; font-size: 1rem; background: #ff4136; border: none; border-radius: 5px;
+    color: #fff; cursor: pointer; transition: background-color 0.2s ease;
+  }
+  button:hover:not(:disabled) {
+    background: #e23922;
+  }
+  button:disabled {
+    background: #7a1e12; cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+
+<div id="top">
+  <div id="videoContainer">
+    <video id="video" autoplay muted playsinline></video>
+    <div id="centerLine"></div>
+  </div>
+
+  <div id="stats">
+    <div id="status">Waiting to start...</div>
+    <div id="currentPace">Current pace: -</div>
+    <div id="lapTime">Last lap time: -</div>
+    <div id="totalTime">Total time: 0.00s</div>
+  </div>
+</div>
+
+<div id="lapTableContainer">
+  <table>
+    <thead>
+      <tr><th>Lap #</th><th>Lap Time (s)</th></tr>
+    </thead>
+    <tbody id="lapTimesBody">
+    </tbody>
+  </table>
+</div>
+
+<div id="controls">
+  <label for="lapCount">Laps:</label>
+  <input type="number" id="lapCount" value="10" min="1" />
+  <button id="startBtn">Start</button>
+</div>
+
+<script>
+(async () => {
+  const video = document.getElementById('video');
+  const lapCountInput = document.getElementById('lapCount');
+  const startBtn = document.getElementById('startBtn');
+  const status = document.getElementById('status');
+  const lapTimesBody = document.getElementById('lapTimesBody');
+  const totalTimeDiv = document.getElementById('totalTime');
+  const currentPaceDiv = document.getElementById('currentPace');
+  const lapTimeDiv = document.getElementById('lapTime');
+
+  let lapsTotal, lapsLeft, lapTimes = [];
+  let startTime, lapStartTime;
+  let detecting = false;
+  let cooldown = false;
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    video.srcObject = stream;
+  } catch (e) {
+    alert('Camera access required');
+    return;
+  }
+
+  function beep() {
+    const audioCtx = new AudioContext();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.value = 1000;
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.2);
+    o.stop(audioCtx.currentTime + 0.2);
+  }
+
+  function updateDisplay() {
+    const now = performance.now();
+    const total = ((now - startTime) / 1000).toFixed(2);
+    totalTimeDiv.textContent = `Total time: ${total}s`;
+    status.textContent = `Laps left: ${lapsLeft}`;
+
+    if (lapTimes.length > 0) {
+      const lastLap = lapTimes[lapTimes.length - 1].toFixed(2);
+      lapTimeDiv.textContent = `Last lap time: ${lastLap}s`;
+      currentPaceDiv.textContent = `Current pace: ${lastLap}s/lap`;
+    } else {
+      lapTimeDiv.textContent = `Last lap time: -`;
+      currentPaceDiv.textContent = `Current pace: -`;
+    }
+
+    lapTimesBody.innerHTML = lapTimes.map((t, i) => 
+      `<tr><td>${i + 1}</td><td>${t.toFixed(2)}</td></tr>`
+    ).join('');
+  }
+
+  function startRace() {
+    lapsTotal = lapsLeft = parseInt(lapCountInput.value, 10);
+    lapTimes = [];
+    startTime = performance.now();
+    lapStartTime = startTime;
+    detecting = true;
+    cooldown = false;
+    beep();
+    status.textContent = 'Race started!';
+    updateDisplay();
+    startBtn.disabled = true;
+    lapCountInput.disabled = true;
+  }
+
+  function onLapDetected() {
+    if (cooldown || !detecting || lapsLeft === 0) return;
+    const now = performance.now();
+    const lapTime = (now - lapStartTime) / 1000;
+    lapTimes.push(lapTime);
+    lapStartTime = now;
+    lapsLeft--;
+    beep();
+    updateDisplay();
+    cooldown = true;
+    setTimeout(() => cooldown = false, 5000);
+    if (lapsLeft === 0) {
+      detecting = false;
+      status.textContent = 'Race finished!';
+      startBtn.disabled = false;
+      lapCountInput.disabled = false;
+    }
+  }
+
+  let prevFrame = null;
+
+  function detectMotion() {
+    if (!detecting) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    if (!prevFrame) {
+      prevFrame = frame;
+      requestAnimationFrame(detectMotion);
+      return;
+    }
+
+    const centerX = Math.floor(canvas.width / 2);
+    const threshold = 40;
+    let motionAmount = 0;
+
+    for (let y = 0; y < canvas.height; y++) {
+      for (let x = centerX - 10; x <= centerX + 10; x++) {
+        const idx = (y * canvas.width + x) * 4;
+        const r = frame.data[idx];
+        const g = frame.data[idx + 1];
+        const b = frame.data[idx + 2];
+        const rPrev = prevFrame.data[idx];
+        const gPrev = prevFrame.data[idx + 1];
+        const bPrev = prevFrame.data[idx + 2];
+        const diff = Math.abs(r - rPrev) + Math.abs(g - gPrev) + Math.abs(b - bPrev);
+        if (diff > threshold) motionAmount++;
+      }
+    }
+
+    prevFrame = frame;
+
+    if (motionAmount > 1000) {
+      onLapDetected();
+    }
+
+    requestAnimationFrame(detectMotion);
+  }
+
+  startBtn.onclick = () =>
+```
+
+
+{
+if (detecting) return;
+startRace();
+detectMotion();
+};
+})(); </script>
+
+</body>
+</html>
+```
