@@ -1,262 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lap Timer</title>
+  <meta charset="UTF-8">
+  <title>10m Track Timer</title>
   <style>
     body {
-      margin: 0; font-family: 'Segoe UI', sans-serif;
-      background: #121212; color: #eee;
-      display: flex; flex-direction: column; height: 100vh;
+      margin: 0;
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
     }
+
+    #totalTimeDisplay {
+      font-size: 4rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 20px;
+      background: #111;
+    }
+
     #top {
-      display: flex; justify-content: space-between;
-      padding: 15px; background: #1f1f1f;
+      display: flex;
+      width: 100%;
+      height: 50vh;
     }
+
     #videoContainer {
-      position: relative; width: 320px; height: 240px;
-      border: 3px solid #444; border-radius: 8px; overflow: hidden;
+      width: 50%;
+      height: 100%;
+      background: black;
     }
+
     #video {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    #centerLine {
-      position: absolute; top: 0; left: 50%;
-      width: 3px; height: 100%; background: #ff4136;
-      transform: translateX(-50%);
+
+    #timing {
+      width: 50%;
+      height: 100%;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 30px;
+      font-size: 3rem;
+      line-height: 1.6;
+      font-weight: bold;
     }
-    #stats {
-      display: flex; flex-direction: column;
-      justify-content: center; width: 360px;
-      background: #222; border-radius: 8px;
+
+    #tableSection {
+      width: 100%;
+      background: #000;
+      color: #0f0;
       padding: 20px;
     }
-    #stats > div {
-      margin-bottom: 12px; font-size: 1.2rem;
-    }
-    #status {
-      font-size: 1.6rem; font-weight: bold; color: #ff4136;
-    }
-    #lapTableContainer {
-      flex: 1; overflow-y: auto; background: #1f1f1f;
-      margin: 15px; border-radius: 8px;
-    }
+
     table {
-      width: 100%; border-collapse: collapse;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.4rem;
     }
-    thead {
-      background: #ff4136; color: white;
-    }
+
     th, td {
-      padding: 10px; text-align: center;
-      border-bottom: 1px solid #333;
+      border: 1px solid #0f0;
+      padding: 8px;
+      text-align: center;
     }
-    tr:nth-child(even) { background: #2c2c2c; }
+
     #controls {
-      padding: 15px; background: #222;
-      display: flex; justify-content: center;
+      margin: 20px;
+      display: flex;
       gap: 10px;
+      justify-content: center;
     }
-    select, input[type=number], button {
-      padding: 6px 10px; font-size: 1rem;
-      border-radius: 5px; border: none;
+
+    button, input {
+      font-size: 1.2rem;
+      padding: 10px;
     }
-    button {
-      background: #ff4136; color: #fff;
-      cursor: pointer;
-    }
-    button:hover:not(:disabled) {
-      background: #e02f1f;
-    }
-    button:disabled {
-      background: #7a1e12; cursor: not-allowed;
+
+    input[type="number"] {
+      width: 80px;
     }
   </style>
 </head>
 <body>
+  <div id="totalTimeDisplay">Total: 0.00s</div>
 
-<div id="top">
-  <div id="videoContainer">
-    <video id="video" autoplay muted playsinline></video>
-    <div id="centerLine"></div>
+  <div id="top">
+    <div id="videoContainer">
+      <video id="video" autoplay></video>
+    </div>
+    <div id="timing">
+      <span id="currentLap">Current Lap: 0.00s</span>
+      <span id="pace">Pace: 0.00s/lap</span>
+      <span id="minPerKm">min/km: 0.00</span>
+      <span id="kmph">km/h: 0.00</span>
+    </div>
   </div>
 
-  <div id="stats">
-    <div id="status">Waiting...</div>
-    <div id="lapTime">Last lap: -</div>
-    <div id="currentPace">Pace: -</div>
-    <div id="totalTime" style="font-size: 1.4rem;">Total: 0.00s</div>
-    <div id="estimatedFinish">Est. Finish: -</div>
+  <div id="controls">
+    <input type="number" id="lapCount" value="100" min="1">
+    <button id="startBtn">Start</button>
+    <button id="pauseBtn" disabled>Pause</button>
+    <button id="resetBtn" disabled>Reset</button>
+    <button id="downloadBtn" disabled>Download CSV</button>
+    <select id="cameraSelect"></select>
   </div>
-</div>
 
-<div id="lapTableContainer">
-  <table>
-    <thead>
-      <tr><th>Lap</th><th>Time (s)</th></tr>
-    </thead>
-    <tbody id="lapTimesBody"></tbody>
-  </table>
-</div>
+  <div id="tableSection">
+    <table id="lapTable">
+      <thead>
+        <tr><th>Lap</th><th>Time (s)</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<div id="controls">
-  <label for="cameraSelect">Camera:</label>
-  <select id="cameraSelect"></select>
-  <label for="lapCount">Laps:</label>
-  <input type="number" id="lapCount" value="10" min="1">
-  <button id="startBtn">Start</button>
-</div>
+  <script>
+    const video = document.getElementById('video');
+    const lapCountInput = document.getElementById('lapCount');
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const cameraSelect = document.getElementById('cameraSelect');
 
-<script>
-const video = document.getElementById('video');
-const cameraSelect = document.getElementById('cameraSelect');
-const lapCountInput = document.getElementById('lapCount');
-const startBtn = document.getElementById('startBtn');
-const status = document.getElementById('status');
-const lapTimesBody = document.getElementById('lapTimesBody');
-const totalTimeDiv = document.getElementById('totalTime');
-const currentPaceDiv = document.getElementById('currentPace');
-const lapTimeDiv = document.getElementById('lapTime');
-const estimatedFinish = document.getElementById('estimatedFinish');
+    const totalTimeDisplay = document.getElementById('totalTimeDisplay');
+    const currentLap = document.getElementById('currentLap');
+    const pace = document.getElementById('pace');
+    const minPerKmDisplay = document.getElementById('minPerKm');
+    const kmphDisplay = document.getElementById('kmph');
+    const tableBody = document.querySelector('#lapTable tbody');
 
-let lapsTotal = 0, lapsLeft = 0, lapTimes = [];
-let startTime, lapStartTime;
-let detecting = false, cooldown = false;
-let stream = null;
+    let mediaStream = null;
+    let lapTimes = [];
+    let detecting = false;
+    let paused = false;
+    let lapsLeft = 0;
+    let startTime = 0;
+    let lapStartTime = 0;
+    let lastTrigger = 0;
 
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-
-async function getCameras() {
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  const cams = devices.filter(d => d.kind === 'videoinput');
-  cameraSelect.innerHTML = '';
-  cams.forEach((cam, i) => {
-    const opt = document.createElement('option');
-    opt.value = cam.deviceId;
-    opt.textContent = cam.label || `Camera ${i + 1}`;
-    cameraSelect.appendChild(opt);
-  });
-}
-
-async function startCamera(id) {
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-  }
-  stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: id } });
-  video.srcObject = stream;
-}
-
-function beep() {
-  const a = new AudioContext();
-  const o = a.createOscillator();
-  const g = a.createGain();
-  o.type = 'sine'; o.frequency.value = 1000;
-  o.connect(g); g.connect(a.destination);
-  o.start(); g.gain.exponentialRampToValueAtTime(0.00001, a.currentTime + 0.2);
-  o.stop(a.currentTime + 0.2);
-}
-
-function updateDisplay() {
-  const now = performance.now();
-  const total = ((now - startTime) / 1000).toFixed(2);
-  totalTimeDiv.textContent = `Total: ${total}s`;
-
-  if (lapTimes.length) {
-    const last = lapTimes[lapTimes.length - 1].toFixed(2);
-    lapTimeDiv.textContent = `Last lap: ${last}s`;
-    currentPaceDiv.textContent = `Pace: ${last}s/lap`;
-    const pace = parseFloat(last);
-    const est = (pace * lapsLeft).toFixed(2);
-    estimatedFinish.textContent = `Est. Finish: ${est}s`;
-  } else {
-    lapTimeDiv.textContent = `Last lap: -`;
-    currentPaceDiv.textContent = `Pace: -`;
-    estimatedFinish.textContent = `Est. Finish: -`;
-  }
-
-  status.textContent = `Laps left: ${lapsLeft}`;
-  lapTimesBody.innerHTML = lapTimes.map((t, i) =>
-    `<tr><td>${i + 1}</td><td>${t.toFixed(2)}</td></tr>`
-  ).join('');
-}
-
-function startRace() {
-  lapsTotal = lapsLeft = parseInt(lapCountInput.value, 10);
-  lapTimes = [];
-  startTime = lapStartTime = performance.now();
-  detecting = true;
-  cooldown = false;
-  updateDisplay();
-  beep();
-  status.textContent = 'Running...';
-  startBtn.disabled = true;
-  lapCountInput.disabled = true;
-  detectMotion();
-}
-
-function onLapDetected() {
-  if (cooldown || !detecting || lapsLeft === 0) return;
-  const now = performance.now();
-  const lapTime = (now - lapStartTime) / 1000;
-  lapStartTime = now;
-  lapTimes.push(lapTime);
-  lapsLeft--;
-  updateDisplay();
-  cooldown = true;
-  beep();
-  setTimeout(() => cooldown = false, 5000);
-  if (lapsLeft === 0) {
-    detecting = false;
-    status.textContent = 'Finished!';
-    startBtn.disabled = false;
-    lapCountInput.disabled = false;
-  }
-}
-
-let prevFrame = null;
-function detectMotion() {
-  if (!detecting) return;
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  if (!prevFrame) {
-    prevFrame = frame;
-    requestAnimationFrame(detectMotion);
-    return;
-  }
-
-  const centerX = Math.floor(canvas.width / 2);
-  const threshold = 40;
-  let motion = 0;
-
-  for (let y = 0; y < canvas.height; y++) {
-    for (let x = centerX - 10; x <= centerX + 10; x++) {
-      const i = (y * canvas.width + x) * 4;
-      const diff = Math.abs(frame.data[i] - prevFrame.data[i]) +
-                   Math.abs(frame.data[i + 1] - prevFrame.data[i + 1]) +
-                   Math.abs(frame.data[i + 2] - prevFrame.data[i + 2]);
-      if (diff > threshold) motion++;
+    async function getCameras() {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const cams = devices.filter(d => d.kind === 'videoinput');
+      cameraSelect.innerHTML = '';
+      cams.forEach((cam, i) => {
+        const option = document.createElement('option');
+        option.value = cam.deviceId;
+        option.text = cam.label || `Camera ${i+1}`;
+        cameraSelect.appendChild(option);
+      });
     }
-  }
 
-  prevFrame = frame;
-  if (motion > 1000) onLapDetected();
-  requestAnimationFrame(detectMotion);
-}
+    async function startCamera() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+      }
+      const deviceId = cameraSelect.value;
+      mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: deviceId ? { exact: deviceId } : undefined }
+      });
+      video.srcObject = mediaStream;
+    }
 
-cameraSelect.onchange = () => startCamera(cameraSelect.value);
-startBtn.onclick = () => { if (!detecting) startRace(); };
+    cameraSelect.onchange = startCamera;
+    getCameras().then(startCamera);
 
-getCameras().then(() => {
-  if (cameraSelect.options.length) {
-    startCamera(cameraSelect.value);
-  }
-});
-</script>
+    startBtn.onclick = () => {
+      lapTimes = [];
+      lapsLeft = parseInt(lapCountInput.value);
+      detecting = true;
+      paused = false;
+      startTime = performance.now();
+      lapStartTime = startTime;
+      lastTrigger = 0;
+      startBtn.disabled = true;
+      pauseBtn.disabled = false;
+      resetBtn.disabled = false;
+      downloadBtn.disabled = true;
+      lapCountInput.disabled = true;
+      detectMotion();
+      updateLiveTimes();
+    };
 
+    pauseBtn.onclick = () => {
+      if (!detecting) return;
+      paused = !paused;
+      if (paused) {
+        pauseBtn.textContent = 'Resume';
+      } else {
+        const now = performance.now();
+        const offset = now - lastTrigger;
+        startTime += offset;
+        lapStartTime += offset;
+        pauseBtn.textContent = 'Pause';
+        detectMotion();
+        updateLiveTimes();
+      }
+    };
+
+    resetBtn.onclick = () => {
+      detecting = false;
+      paused = false;
+      lapTimes = [];
+      lapsLeft = 0;
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+      resetBtn.disabled = true;
+      downloadBtn.disabled = true;
+      lapCountInput.disabled = false;
+      pauseBtn.textContent = 'Pause';
+      updateDisplay();
+    };
+
+    downloadBtn.onclick = () => {
+      let csv = 'Lap,Time(s)\n';
+      lapTimes.forEach((t, i) => csv += `${i+1},${t.toFixed(2)}\n`);
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'lap_times.csv';
+      a.click();
+    };
+
+    function updateDisplay() {
+      tableBody.innerHTML = '';
+      lapTimes.forEach((t, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${i+1}</td><td>${t.toFixed(2)}</td>`;
+        tableBody.appendChild(row);
+      });
+
+      if (lapTimes.length > 0) {
+        const recent = lapTimes[lapTimes.length - 1];
+        pace.textContent = `Pace: ${recent.toFixed(2)}s/lap`;
+        calcPaceStats(recent);
+      }
+
+      const total = lapTimes.reduce((a,b) => a + b, 0);
+      totalTimeDisplay.textContent = `Total: ${total.toFixed(2)}s`;
+    }
+
+    function updateLiveTimes() {
+      if (!detecting || paused) return;
+
+      const now = performance.now();
+      const currentLapTime = (now - lapStartTime) / 1000;
+      const currentTotalTime = (now - startTime) / 1000;
+
+      currentLap.textContent = `Current Lap: ${currentLapTime.toFixed(2)}s`;
+      pace.textContent = `Pace: ${currentLapTime.toFixed(2)}s/lap`;
+      calcPaceStats(currentLapTime);
+      totalTimeDisplay.textContent = `Total: ${currentTotalTime.toFixed(2)}s`;
+
+      requestAnimationFrame(updateLiveTimes);
+    }
+
+    function calcPaceStats(lapSec) {
+      const lapMeters = 20;
+      const speedMps = lapMeters / lapSec;
+      const kmph = speedMps * 3.6;
+      const minPerKm = (60 / kmph);
+      minPerKmDisplay.textContent = `min/km: ${minPerKm.toFixed(2)}`;
+      kmphDisplay.textContent = `km/h: ${kmph.toFixed(2)}`;
+    }
+
+    async function detectMotion() {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const w = 320, h = 240;
+      canvas.width = w;
+      canvas.height = h;
+
+      let prevFrame = null;
+
+      function step() {
+        if (!detecting || paused) return;
+        ctx.drawImage(video, 0, 0, w, h);
+        const frame = ctx.getImageData(0, 0, w, h);
+        if (prevFrame) {
+          let motion = 0;
+          for (let i = 0; i < frame.data.length; i += 4) {
+            const diff = Math.abs(frame.data[i] - prevFrame.data[i]) +
+                         Math.abs(frame.data[i+1] - prevFrame.data[i+1]) +
+                         Math.abs(frame.data[i+2] - prevFrame.data[i+2]);
+            if (diff > 50) motion++;
+          }
+          const now = performance.now();
+          if (motion > 10000 && now - lastTrigger > 5000) {
+            lastTrigger = now;
+            const lapTime = (now - lapStartTime) / 1000;
+            lapStartTime = now;
+            lapTimes.push(lapTime);
+            lapsLeft--;
+            updateDisplay();
+            if (lapsLeft <= 0) {
+              detecting = false;
+              pauseBtn.disabled = true;
+              downloadBtn.disabled = false;
+            }
+          }
+        }
+        prevFrame = frame;
+        setTimeout(step, 100);
+      }
+      step();
+    }
+  </script>
 </body>
 </html>
