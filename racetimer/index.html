@@ -320,7 +320,7 @@ function updateLiveTimes() {
             if (diff > 50) motion++;
           }
           const now = performance.now();
-          if (motion > 10000 && now - lastTrigger > 5000) {
+          if (motion > 10000 && now - lastTrigger > 3000) {
             lastTrigger = now;
             const lapTime = (now - lapStartTime) / 1000;
             lapStartTime = now;
