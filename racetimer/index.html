@@ -229,38 +229,65 @@
       a.click();
     };
 
-    function updateDisplay() {
-      tableBody.innerHTML = '';
-      lapTimes.forEach((t, i) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${i+1}</td><td>${t.toFixed(2)}</td>`;
-        tableBody.appendChild(row);
-      });
+function formatMinSecCc(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  const cc = Math.floor((seconds - Math.floor(seconds)) * 100);
+  return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${cc.toString().padStart(2,'0')}`;
+}
 
-      if (lapTimes.length > 0) {
-        const recent = lapTimes[lapTimes.length - 1];
-        pace.textContent = `Pace: ${recent.toFixed(2)}s/lap`;
-        calcPaceStats(recent);
-      }
+function updateDisplay() {
+  tableBody.innerHTML = '';
+  lapTimes.forEach((t, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${i+1}</td><td>${t.toFixed(2)}</td>`;
+    tableBody.appendChild(row);
+  });
 
-      const total = lapTimes.reduce((a,b) => a + b, 0);
-      totalTimeDisplay.textContent = `Total: ${total.toFixed(2)}s`;
+  const total = lapTimes.reduce((a,b) => a + b, 0);
+  totalTimeDisplay.textContent = `Total: ${total.toFixed(2)}s`;
+
+  if (lapTimes.length > 0) {
+    const lastLap = lapTimes[lapTimes.length - 1];
+    const avgLap = total / lapTimes.length;
+    pace.textContent = `Last Lap Pace: ${formatMinSecCc(lastLap)} min/km`;
+    const avgPaceSecPerKm = (avgLap / 20) * 1000;
+    minPerKmDisplay.textContent = `Avg min/km: ${formatMinSecCc(avgPaceSecPerKm)}`;
+    
+    const speedMps = 20 / lastLap;
+    const kmph = speedMps * 3.6;
+    kmphDisplay.textContent = `Speed: ${kmph.toFixed(2)} km/h`;
+
+    // ETA calculation (lapsLeft * avgLap)
+    if (lapsLeft > 0) {
+      const etaSec = lapsLeft * avgLap;
+      const etaMin = Math.floor(etaSec / 60);
+      const etaS = (etaSec % 60).toFixed(2);
+      const eta = `${etaMin}m ${etaS}s`;
+      currentLap.textContent = `ETA: ${eta}`;
+    } else {
+      currentLap.textContent = 'Race Finished';
     }
+  } else {
+    pace.textContent = `Last Lap Pace: 00:00.00 min/km`;
+    minPerKmDisplay.textContent = `Avg min/km: 00:00.00`;
+    kmphDisplay.textContent = `Speed: 0.00 km/h`;
+    currentLap.textContent = '';
+  }
+}
 
-    function updateLiveTimes() {
-      if (!detecting || paused) return;
+function updateLiveTimes() {
+  if (!detecting || paused) return;
 
-      const now = performance.now();
-      const currentLapTime = (now - lapStartTime) / 1000;
-      const currentTotalTime = (now - startTime) / 1000;
+  const now = performance.now();
+  const currentLapTime = (now - lapStartTime) / 1000;
+  const currentTotalTime = (now - startTime) / 1000;
 
-      currentLap.textContent = `Current Lap: ${currentLapTime.toFixed(2)}s`;
-      pace.textContent = `Pace: ${currentLapTime.toFixed(2)}s/lap`;
-      calcPaceStats(currentLapTime);
-      totalTimeDisplay.textContent = `Total: ${currentTotalTime.toFixed(2)}s`;
+  currentLap.textContent = `Current Lap Time: ${currentLapTime.toFixed(2)}s`;
+  totalTimeDisplay.textContent = `Total: ${currentTotalTime.toFixed(2)}s`;
 
-      requestAnimationFrame(updateLiveTimes);
-    }
+  requestAnimationFrame(updateLiveTimes);
+}
 
     function calcPaceStats(lapSec) {
       const lapMeters = 20;
