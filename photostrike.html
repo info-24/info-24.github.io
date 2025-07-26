@@ -316,6 +316,9 @@
         let availableCameras = [];
         let currentCameraIndex = 0;
 
+        // Stores parameters for drawing video/image to canvas to maintain aspect ratio
+        let drawImageParams = {};
+
         // Gun configurations
         const guns = {
             'glock19': {
@@ -426,11 +429,8 @@
                 video.srcObject = cameraStream;
                 video.onloadedmetadata = () => {
                     video.play();
-                    // Set canvas dimensions to match video
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    // Redraw canvas with current settings (live or static)
-                    drawCanvas();
+                    // Initial sizing and drawing after video metadata loads
+                    resizeCanvasAndRecalculateDrawParams();
                 };
             } catch (error) {
                 console.error('Error accessing camera:', error);
@@ -450,13 +450,60 @@
                 await startCamera(nextCameraId);
                 // Reset lastShotImage when switching camera to ensure correct view mode
                 lastShotImage = null;
-                drawCanvas();
+                // Re-calculate draw params and redraw for the new camera stream
+                resizeCanvasAndRecalculateDrawParams();
             } else {
                 showMessageBox('No other cameras available to switch to.', 2000);
             }
         }
 
-        // --- Canvas Drawing ---
+        // --- Canvas Drawing and Resizing ---
+
+        /**
+         * Calculates the parameters for ctx.drawImage to simulate object-fit: cover.
+         * Updates the global drawImageParams object.
+         */
+        function calculateDrawImageParams() {
+            if (!video.videoWidth || !video.videoHeight || !canvas.width || !canvas.height) {
+                return; // Not ready yet
+            }
+
+            const videoAspectRatio = video.videoWidth / video.videoHeight;
+            const canvasAspectRatio = canvas.width / canvas.height;
+
+            let sx = 0, sy = 0, sWidth = video.videoWidth, sHeight = video.videoHeight;
+            let dx = 0, dy = 0, dWidth = canvas.width, dHeight = canvas.height;
+
+            if (videoAspectRatio > canvasAspectRatio) {
+                // Video is wider than canvas display area, crop video horizontally
+                sWidth = video.videoHeight * canvasAspectRatio;
+                sx = (video.videoWidth - sWidth) / 2;
+            } else {
+                // Video is taller than canvas display area, crop video vertically
+                sHeight = video.videoWidth / canvasAspectRatio;
+                sy = (video.videoHeight - sHeight) / 2;
+            }
+
+            drawImageParams = { sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight };
+        }
+
+        /**
+         * Resizes the canvas to match its container's rendered size and recalculates drawImage params.
+         * This ensures circles are drawn correctly and the video scales properly.
+         */
+        function resizeCanvasAndRecalculateDrawParams() {
+            const container = document.querySelector('.camera-container');
+            // Use clientWidth/clientHeight for the actual rendered size without padding/border
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            // Set canvas dimensions to match the rendered container dimensions
+            canvas.width = containerWidth;
+            canvas.height = containerHeight;
+
+            calculateDrawImageParams();
+            drawCanvas(); // Redraw immediately after resize
+        }
 
         /**
          * Draws the video frame or last shot image onto the canvas and overlays the crosshair circle.
@@ -468,17 +515,30 @@
             const currentGunType = gunSelect.value;
             const isAWP = currentGunType === 'awp';
 
+            // Ensure drawImageParams are up-to-date, especially for live video
+            if (isAWP && video.videoWidth > 0 && video.videoHeight > 0) {
+                calculateDrawImageParams();
+            }
+
             if (isAWP) {
                 // For AWP, draw live video
-                if (!video.paused && !video.ended) {
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                if (!video.paused && !video.ended && drawImageParams.sWidth) {
+                    ctx.drawImage(video,
+                                  drawImageParams.sx, drawImageParams.sy,
+                                  drawImageParams.sWidth, drawImageParams.sHeight,
+                                  drawImageParams.dx, drawImageParams.dy,
+                                  drawImageParams.dWidth, drawImageParams.dHeight);
                 }
-                // Continue animation loop for AWP
                 animationFrameId = requestAnimationFrame(drawCanvas);
             } else {
                 // For other guns, draw the last shot image if available
-                if (lastShotImage && lastShotImage.complete) {
-                    ctx.drawImage(lastShotImage, 0, 0, canvas.width, canvas.height);
+                if (lastShotImage && lastShotImage.complete && drawImageParams.sWidth) {
+                    // Draw the static image using the same object-fit: cover logic
+                    ctx.drawImage(lastShotImage,
+                                  drawImageParams.sx, drawImageParams.sy,
+                                  drawImageParams.sWidth, drawImageParams.sHeight,
+                                  drawImageParams.dx, drawImageParams.dy,
+                                  drawImageParams.dWidth, drawImageParams.dHeight);
                 } else {
                     // If no last shot, draw black background
                     ctx.fillStyle = '#000';
@@ -494,7 +554,8 @@
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
 
-            // Calculate radii based on the smaller dimension of the canvas
+            // Calculate radii based on the smaller dimension of the canvas,
+            // which now correctly reflects the display aspect ratio.
             const minDimension = Math.min(canvas.width, canvas.height);
 
             // Draw the main crosshair circle (target size)
@@ -589,6 +650,8 @@
                     lastShotImage = new Image();
                     lastShotImage.src = tempCanvas.toDataURL('image/jpeg', 0.8); // Use JPEG for smaller size
                     lastShotImage.onload = () => {
+                        // Ensure drawImageParams are calculated for the new static image
+                        calculateDrawImageParams();
                         drawCanvas(); // Redraw main canvas with the new static image
                     };
                 } else {
@@ -724,6 +787,10 @@
         });
         menuButton.addEventListener('click', toggleMenu);
         closeMenuButton.addEventListener('click', toggleMenu);
+
+        // Add a resize listener to ensure canvas and drawing parameters are updated on window resize
+        window.addEventListener('resize', resizeCanvasAndRecalculateDrawParams);
+
 
         // --- Initialization ---
         window.onload = async () => {
