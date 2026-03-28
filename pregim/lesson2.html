@@ -415,12 +415,50 @@
 <excercise>
     <declare>n</declare>
     <description>
-        Câte pătrățele <strong>albe</strong> sunt pe o tablă de șah de latură <code>2 * n</code>?
+        Câte pătrățele <strong>albe</strong> sunt pe o tablă de șah de latură <code>2 * n</code>? <br>
         Indiciu: jumătate din pătrățele sunt albe.
     </description>
     <testcase>
         <in>10</in>
         <output>200</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>n</declare>
+    <description>
+        Doge se joacă Jenga, și a construit un turn simplu, încă nu s-au apucat să mute piesele.
+
+        Câte piese sunt într-un turn de Jenga simplu de înălțime <code>n</code>? <br>
+
+        Turnul din imaginea de mai jos este de înălțime 16, de exemplu, și are în total 48 de piese.
+        <img src="./jenga.webp">
+    </description>
+    <testcase>
+        <in>8</in>
+        <output>24</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>n</declare>
+    <description>
+        Magnus Carlsen s-a apucat să joace șah pe o tablă infinită.
+
+        O tablă de șah infinită are un centru, de patru pătrate, numim inelul 0. <br>
+        În jurul centrului, formăm mai multe inele. Fiecare inel înconjoară inelul anterior, cum apare în exemplu. <br>
+        Inelul 0 are 4 pătrate, inelul 1 are 12 pătrate, inelul 2 are 20, inelul 3 are 28 și așa mai departe. <br>
+        Câte pătrățele are inelul <code>n</code>? <br> <br>
+
+        Indiciu: Ce observăm în șirul 4, 12, 20, 28...? <br>
+        
+        <img src="./board.png" width=200>
+    </description>
+    <testcase>
+        <in>4</in>
+        <output>36</output>
         <weight>2</weight>
     </testcase>
 </excercise>
