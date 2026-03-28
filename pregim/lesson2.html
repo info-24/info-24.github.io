@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informatics Platform</title>
+
+    <!-- Monaco Editor CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/editor/editor.main.min.css">
+
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --pastel-red: #fecaca;
+            --pastel-yellow: #fef08a;
+            --pastel-green: #bbf7d0;
+            --empty-gray: #f1f5f9;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .exercise {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+
+        .exercise:hover {
+            transform: translateY(-2px);
+        }
+
+        .exercise h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exercise h3 span {
+            font-size: 0.85rem;
+            background: var(--empty-gray);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: var(--text-muted);
+        }
+
+        .exercise .fail-info {
+            background: #fee2e2;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .editor-container {
+            height: 100px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .run-btn {
+            padding: 10px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .run-btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .score-bar {
+            height: 32px;
+            border-radius: 10px;
+            margin-top: 20px;
+            background: var(--empty-gray);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+
+        .score-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--empty-gray);
+            text-align: center;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 32px;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s ease;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-wrapper">
+        <excercise>
+            <declare>x y</declare>
+            <description>
+                Stroia are două numere naturale, <code>x</code> și <code>y</code>. El vrea să afle <bold>produsul</bold> lor. <br>
+                Folosiți operatorul <code>*</code>.
+            </description>
+            <testcase>
+                <in>5 3</in>
+                <output>15</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>6 7</in>
+                <output>42</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 0</in>
+                <output>0</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+
+        <excercise>
+    <declare>p</declare>
+    <description>
+        Rick Astley a făcut prea multe farse, și primește amendă 10 lei pentru fiecare farsă.
+        Cât trebuie să plătească dacă a făcut <code>p</code> farse?
+    </description>
+    <testcase>
+        <in>10</in>
+        <output>100</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>7</in>
+        <output>70</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>p m</declare>
+    <description>
+        Balerina Capucina a făcut un aprozar. <br>
+        Ea vinde portocale la 3 lei și mere la 4 lei. <br>
+        Dacă a vândut <code>p</code> portocale și <code>m</code> mere, câți bani a făcut?
+    </description>
+    <testcase>
+        <in>5 3</in>
+        <output>27</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0 0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>10 2</in>
+        <output>38</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>b c</declare>
+    <description>
+        Măr a deschis un magazin de dulciuri. <br>
+        El vinde bomboane cu 2 lei și ciocolată cu 5 lei. <br>
+        Dacă a vândut <code>b</code> bomboane și <code>c</code> ciocolate, câți bani a strâns?
+    </description>
+    <testcase>
+        <in>3 2</in>
+        <output>16</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0 0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>5 5</in>
+        <output>35</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>a b c</declare>
+    <description>
+        Doge face un picnic și pregătește sandvișuri. <br>
+        Folosește pâine cu 1 leu, brânză cu 3 lei și șuncă cu 4 lei pe sandviș. <br>
+        Dacă face <code>a</code> sandvișuri cu pâine, <code>b</code> cu brânză și <code>c</code> cu șuncă, cât cheltuiește?
+    </description>
+    <testcase>
+        <in>2 3 1</in>
+        <output>15</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0 0 0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>5 0 2</in>
+        <output>13</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>t p</declare>
+    <description>
+        Trollface vinde bilete la un concert. <br>
+        Bilet normal costă 20 lei și VIP 50 lei. <br>
+        Dacă vinde <code>t</code> bilete normale și <code>p</code> bilete VIP, cât face total?
+    </description>
+    <testcase>
+        <in>3 2</in>
+        <output>160</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0 0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>5 5</in>
+        <output>350</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>x y</declare>
+    <description>
+        Ceapă se duce la cafenea. <br>
+        Cafeaua simplă costă 5 lei, iar cappuccino 8 lei. <br>
+        Dacă ia <code>x</code> cafele simple și <code>y</code> cappuccino, cât plătește?
+    </description>
+    <testcase>
+        <in>2 3</in>
+        <output>34</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0 0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>1 1</in>
+        <output>13</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>m c s</declare>
+    <description>
+        Shrek a deschis un fast-food în Pădurea Vrăjită. <br>
+        Burgerii sunt 7 lei, cartofii prăjiți 3 lei și sucul 2 lei. <br>
+        Dacă vinde <code>m</code> burgeri, <code>c</code> cartofi și <code>s</code> sucuri, câți bani face în total?
+    </description>
+    <testcase>
+        <in>2 3 4</in>
+        <output>31</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0 0 0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>5 0 2</in>
+        <output>39</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+
+<excercise>
+    <declare>x y</declare>
+    <description>
+        La un test, elevul primește 3 puncte pentru fiecare răspuns corect și pierde 1 pentru fiecare răspuns greșit.  <br>
+        Dacă Andrei a făcut <code>x</code> exerciții corect și <code>y</code> exerciții greșit, câte puncte a primit.
+    </description>
+    <testcase>
+        <in>6 7</in>
+        <output>11</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>0 0</in>
+        <output>0</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>5 0</in>
+        <output>15</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>a b</declare>
+    <description>
+        La un concurs sportiv, sunt în total <code>a</code> ținte și Radu a ratat <code>b</code> ținte. <br>
+        Dacă pentru fiecare țintă lovită primește 5 puncte, câte puncte are în total?   <br>
+        <strong>Folosește paranteze!</strong> 
+    </description>
+    <testcase>
+        <in>10 5</in>
+        <output>25</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>10 2</in>
+        <output>40</output>
+        <weight>2</weight>
+    </testcase>
+    <testcase>
+        <in>5 0</in>
+        <output>25</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>p q</declare>
+    <description>
+        Andrei are o tabletă de ciocolată Milka, care are <code>p</code> rânduri și <code>q</code> coloane.
+        Câte pătrățele de ciocolată are tableta?
+    </description>
+    <testcase>
+        <in>10 5</in>
+        <output>50</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>n</declare>
+    <description>
+        Câte pătrățele sunt pe o tablă de șah de latură <code>n</code>?
+    </description>
+    <testcase>
+        <in>10</in>
+        <output>100</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>n</declare>
+    <description>
+        Câte pătrățele sunt pe o tablă de șah de latură <code>2 * n</code>?
+    </description>
+    <testcase>
+        <in>10</in>
+        <output>400</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+<excercise>
+    <declare>n</declare>
+    <description>
+        Câte pătrățele <strong>albe</strong> sunt pe o tablă de șah de latură <code>2 * n</code>?
+        Indiciu: jumătate din pătrățele sunt albe.
+    </description>
+    <testcase>
+        <in>10</in>
+        <output>200</output>
+        <weight>2</weight>
+    </testcase>
+</excercise>
+
+</div>
+
+    <!-- Monaco Editor Loader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/loader.min.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs' } });
+
+        require(['vs/editor/editor.main'], function () {
+
+            document.querySelectorAll('excercise').forEach((ex, idx) => {
+                const declare = ex.querySelector('declare')?.textContent.trim() || '';
+                const vars = declare.split(/\s+/).filter(Boolean);
+
+                const description = ex.querySelector('description')?.innerHTML || '';
+
+                const testcases = Array.from(ex.querySelectorAll('testcase')).map(tc => {
+                    const input = tc.querySelector('in')?.textContent.trim().split(/\s+/).map(Number) || [];
+                    const output = tc.querySelector('output')?.textContent.trim() || '';
+                    const weight = Number(tc.querySelector('weight')?.textContent.trim() || 1);
+                    return { input, output, weight };
+                });
+
+                const container = document.createElement('div');
+                container.className = 'exercise';
+
+                // Title
+                const title = document.createElement('h3');
+                title.innerHTML = `Exercise ${idx + 1} <span>Variables: ${vars.join(', ')}</span>`;
+                container.appendChild(title);
+
+                // Markdown Description
+                if (description) {
+                    const descDiv = document.createElement('div');
+                    descDiv.innerHTML = description;
+                    container.appendChild(descDiv);
+                }
+
+                // Editor
+                const editorDiv = document.createElement('div');
+                editorDiv.className = 'editor-container';
+                container.appendChild(editorDiv);
+
+                // Run Button
+                const button = document.createElement('button');
+                button.className = 'run-btn';
+                button.textContent = 'Run Solution';
+                container.appendChild(button);
+
+                // Score bar
+                const scoreBar = document.createElement('div');
+                scoreBar.className = 'score-bar';
+                const scoreFill = document.createElement('div');
+                scoreFill.className = 'score-fill';
+                scoreFill.textContent = 'Ready';
+                scoreBar.appendChild(scoreFill);
+                container.appendChild(scoreBar);
+
+                ex.replaceWith(container);
+
+                const editor = monaco.editor.create(editorDiv, {
+                    value: `return`,
+                    language: 'javascript',
+                    theme: 'vs-light',
+                    automaticLayout: true,
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    scrollBeyondLastLine: false,
+                    lineNumbers: 'on',
+                    roundedSelection: true
+                });
+
+                button.addEventListener('click', () => {
+                    const code = editor.getValue().trim();
+
+                    if (!code) {
+                        scoreFill.style.width = '0%';
+                        scoreFill.textContent = 'Empty';
+                        scoreFill.style.backgroundColor = 'var(--empty-gray)';
+                        return;
+                    }
+
+                    let func;
+                    try {
+                        func = new Function(...vars, code);
+                    } catch (err) {
+                        scoreFill.style.width = '100%';
+                        scoreFill.textContent = 'Syntax Error';
+                        scoreFill.style.backgroundColor = 'var(--pastel-red)';
+                        return;
+                    }
+
+                    let score = 0;
+                    const total = testcases.reduce((sum, t) => sum + t.weight, 0);
+                    let firstFail = null;
+
+                    for (let tc of testcases) {
+                        try {
+                            const result = func(...tc.input);
+                            if (String(result) === String(tc.output)) {
+                                score += tc.weight;
+                            } else if (!firstFail) {
+                                firstFail = { ...tc, userResult: result };
+                            }
+                        } catch (err) {
+                            if (!firstFail) firstFail = { ...tc, userResult: 'Error' };
+                        }
+                    }
+
+                    const percent = Math.round((score / total) * 100);
+                    scoreFill.style.width = percent + '%';
+                    scoreFill.textContent = percent + '%';
+
+                    if (percent === 0) {
+                        scoreFill.style.backgroundColor = 'var(--pastel-red)';
+                        scoreFill.style.width = '100%';
+                    } else if (percent < 100) {
+                        scoreFill.style.backgroundColor = 'var(--pastel-yellow)';
+                    } else {
+                        scoreFill.style.backgroundColor = 'var(--pastel-green)';
+                    }
+
+                    // Show first failing testcase
+                    if (firstFail) {
+                        let failDiv = container.querySelector('.fail-info');
+                        if (!failDiv) {
+                            failDiv = document.createElement('div');
+                            failDiv.className = 'fail-info';
+                            container.appendChild(failDiv);
+                        }
+                        failDiv.innerHTML = `
+          <strong>First failing testcase:</strong><br>
+          Input: ${firstFail.input.join(', ')}<br>
+          Your Output: ${firstFail.userResult}<br>
+          Expected: ${firstFail.output}
+        `;
+                    } else {
+                        const failDiv = container.querySelector('.fail-info');
+                        if (failDiv) failDiv.remove();
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

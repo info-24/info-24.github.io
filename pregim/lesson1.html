@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informatics Platform</title>
+
+    <!-- Monaco Editor CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/editor/editor.main.min.css">
+
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --pastel-red: #fecaca;
+            --pastel-yellow: #fef08a;
+            --pastel-green: #bbf7d0;
+            --empty-gray: #f1f5f9;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .exercise {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+
+        .exercise:hover {
+            transform: translateY(-2px);
+        }
+
+        .exercise h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exercise h3 span {
+            font-size: 0.85rem;
+            background: var(--empty-gray);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: var(--text-muted);
+        }
+
+        .exercise .fail-info {
+            background: #fee2e2;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .editor-container {
+            height: 100px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .run-btn {
+            padding: 10px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .run-btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .score-bar {
+            height: 32px;
+            border-radius: 10px;
+            margin-top: 20px;
+            background: var(--empty-gray);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+
+        .score-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--empty-gray);
+            text-align: center;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 32px;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s ease;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-wrapper">
+        <excercise>
+            <declare>x y</declare>
+            <description>
+                Stroia are două numere naturale, <code>x</code> și <code>y</code>. El vrea să afle suma lor.
+            </description>
+            <testcase>
+                <in>5 3</in><output>8</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>6 7</in><output>13</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 0</in><output>0</output>
+                <weight>3</weight>
+            </testcase>
+        </excercise>
+
+        <excercise>
+            <declare>x y z</declare>
+            <description>
+                Stroia primește <code>x</code> acadele și <code>y</code> bomboane. Radu fură <code>z</code> bomboane.
+                Câte dulciuri mai are Stroia?
+            </description>
+            <testcase>
+                <in>5 3 2</in><output>6</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>6 7 3</in><output>10</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>5 5 3</in><output>7</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 0 0</in><output>0</output>
+                <weight>3</weight>
+            </testcase>
+        </excercise>
+
+        <excercise>
+            <declare>x</declare>
+            <description>
+                Care este succesorul lui <code>x</code>?
+            </description>
+            <testcase>
+                <in>1</in><output>2</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>2</in><output>3</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0</in><output>1</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>100</in><output>101</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+
+        <excercise>
+            <declare>x</declare>
+            <description>
+                Care este predecesorul lui <code>x</code>?
+            </description>
+            <testcase>
+                <in>1</in><output>0</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>2</in><output>1</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>5</in><output>4</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>100</in><output>99</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+
+        <excercise>
+            <declare>x y</declare>
+            <description>
+            <img src="https://www.pngmart.com/files/24/Tung-Tung-Tung-Sahur-PNG-HD-Isolated.png" width=100> <br>
+                Dacă Tung Tung Tung Sahur are <code>x</code> labuburi, dar pierde <code>y</code> labuburi, câte mai are?
+            </description>
+            <testcase>
+                <in>5 5</in><output>0</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>5 3</in><output>2</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>10 6</in><output>4</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>100 1</in><output>99</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>a b</declare>
+            <description> Ana are <code>a</code> mere și primește încă <code>b</code> mere. Câte mere are acum Ana?
+            </description>
+            <testcase>
+                <in>3 4</in><output>7</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 5</in><output>5</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>2 0</in><output>2</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>m n</declare>
+            <description> Marius are <code>m</code> jucării și îi dă lui fratele său <code>n</code> jucării. Câte
+                jucării mai rămân la Marius? </description>
+            <testcase>
+                <in>5 2</in><output>3</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>10 5</in><output>5</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>3 3</in><output>0</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>p q</declare>
+            <description> Paul are <code>p</code> creioane și primește încă <code>q</code>. Câte creioane are Paul în
+                total? </description>
+            <testcase>
+                <in>7 3</in><output>10</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 0</in><output>0</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>4 6</in><output>10</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>x y</declare>
+            <description> Maria are <code>x</code> bomboane și mănâncă <code>y</code> bomboane. Câte bomboane mai are
+                Maria? </description>
+            <testcase>
+                <in>5 2</in><output>3</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>3 3</in><output>0</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>10 1</in><output>9</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>a b</declare>
+            <description> Dacă Andrei are <code>a</code> cărți și primește încă <code>b</code>, câte cărți are în total?
+            </description>
+            <testcase>
+                <in>8 2</in><output>10</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 7</in><output>7</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>3 3</in><output>6</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>x y z</declare>
+            <description> 
+            <img src="https://i.etsystatic.com/32114489/r/il/44f98c/3560199738/il_1588xN.3560199738_nfe0.jpg" width=100> <br>Pepe are <code>x</code> memes, primește <code>y</code> memes de la prieteni și pierde
+                <code>z</code> memes. Câte memes mai are Pepe? </description>
+            <testcase>
+                <in>5 3 2</in><output>6</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>2 4 1</in><output>5</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 2 0</in><output>2</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>a b c</declare>
+            <description>
+                 <img src="https://i.pinimg.com/736x/e6/2b/1b/e62b1b52e1d0e2b0a11ccb890667e446--shiba-inu-doge-artsy.jpg" width=100> <br>
+            Doge are <code>a</code> biscuiți, primește <code>b</code> biscuiți și îi dă <code>c</code>
+                pisicii. Câți biscuiți mai are Doge? </description>
+            <testcase>
+                <in>3 5 2</in><output>6</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 4 1</in><output>3</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>2 2 3</in><output>1</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>m n k</declare>
+            <description> 
+                 <img src="https://i.etsystatic.com/32114489/r/il/44f98c/3560199738/il_1588xN.3560199738_nfe0.jpg" width=100> <br>
+               Grumpy Cat are <code>m</code> crengi, primește încă <code>n</code> și pierde <code>k</code>.
+                Câte crengi mai are? </description>
+            <testcase>
+                <in>4 3 2</in><output>5</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 2 1</in><output>1</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>5 0 5</in><output>0</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>p q r</declare>
+            <description> 
+            <img src="https://pngimg.com/d/shrek_PNG16.png" width=100> <br>
+                Shrek are <code>p</code> cești de supă, primește <code>q</code> și mănâncă <code>r</code>.
+                Câte cești mai rămân? </description>
+            <testcase>
+                <in>6 2 3</in><output>5</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>1 1 1</in><output>1</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 3 2</in><output>1</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+        <excercise>
+            <declare>x y z</declare>
+            <description> 
+                 <img src="https://upload.wikimedia.org/wikipedia/en/7/73/Trollface.png" width=100> <br>
+                            Trollface are <code>x</code> glume, primește <code>y</code> glume și îi dă <code>z</code>
+                prietenului. Câte glume mai are Trollface? </description>
+            <testcase>
+                <in>7 5 3</in><output>9</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>2 2 1</in><output>3</output>
+                <weight>2</weight>
+            </testcase>
+            <testcase>
+                <in>0 1 0</in><output>1</output>
+                <weight>2</weight>
+            </testcase>
+        </excercise>
+    </div>
+
+    <!-- Monaco Editor Loader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/loader.min.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs' } });
+
+        require(['vs/editor/editor.main'], function () {
+
+            document.querySelectorAll('excercise').forEach((ex, idx) => {
+                const declare = ex.querySelector('declare')?.textContent.trim() || '';
+                const vars = declare.split(/\s+/).filter(Boolean);
+
+                const description = ex.querySelector('description')?.innerHTML || '';
+
+                const testcases = Array.from(ex.querySelectorAll('testcase')).map(tc => {
+                    const input = tc.querySelector('in')?.textContent.trim().split(/\s+/).map(Number) || [];
+                    const output = tc.querySelector('output')?.textContent.trim() || '';
+                    const weight = Number(tc.querySelector('weight')?.textContent.trim() || 1);
+                    return { input, output, weight };
+                });
+
+                const container = document.createElement('div');
+                container.className = 'exercise';
+
+                // Title
+                const title = document.createElement('h3');
+                title.innerHTML = `Exercise ${idx + 1} <span>Variables: ${vars.join(', ')}</span>`;
+                container.appendChild(title);
+
+                // Markdown Description
+                if (description) {
+                    const descDiv = document.createElement('div');
+                    descDiv.innerHTML = description;
+                    container.appendChild(descDiv);
+                }
+
+                // Editor
+                const editorDiv = document.createElement('div');
+                editorDiv.className = 'editor-container';
+                container.appendChild(editorDiv);
+
+                // Run Button
+                const button = document.createElement('button');
+                button.className = 'run-btn';
+                button.textContent = 'Run Solution';
+                container.appendChild(button);
+
+                // Score bar
+                const scoreBar = document.createElement('div');
+                scoreBar.className = 'score-bar';
+                const scoreFill = document.createElement('div');
+                scoreFill.className = 'score-fill';
+                scoreFill.textContent = 'Ready';
+                scoreBar.appendChild(scoreFill);
+                container.appendChild(scoreBar);
+
+                ex.replaceWith(container);
+
+                const editor = monaco.editor.create(editorDiv, {
+                    value: `return`,
+                    language: 'javascript',
+                    theme: 'vs-light',
+                    automaticLayout: true,
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    scrollBeyondLastLine: false,
+                    lineNumbers: 'on',
+                    roundedSelection: true
+                });
+
+                button.addEventListener('click', () => {
+                    const code = editor.getValue().trim();
+
+                    if (!code) {
+                        scoreFill.style.width = '0%';
+                        scoreFill.textContent = 'Empty';
+                        scoreFill.style.backgroundColor = 'var(--empty-gray)';
+                        return;
+                    }
+
+                    let func;
+                    try {
+                        func = new Function(...vars, code);
+                    } catch (err) {
+                        scoreFill.style.width = '100%';
+                        scoreFill.textContent = 'Syntax Error';
+                        scoreFill.style.backgroundColor = 'var(--pastel-red)';
+                        return;
+                    }
+
+                    let score = 0;
+                    const total = testcases.reduce((sum, t) => sum + t.weight, 0);
+                    let firstFail = null;
+
+                    for (let tc of testcases) {
+                        try {
+                            const result = func(...tc.input);
+                            if (String(result) === String(tc.output)) {
+                                score += tc.weight;
+                            } else if (!firstFail) {
+                                firstFail = { ...tc, userResult: result };
+                            }
+                        } catch (err) {
+                            if (!firstFail) firstFail = { ...tc, userResult: 'Error' };
+                        }
+                    }
+
+                    const percent = Math.round((score / total) * 100);
+                    scoreFill.style.width = percent + '%';
+                    scoreFill.textContent = percent + '%';
+
+                    if (percent === 0) {
+                        scoreFill.style.backgroundColor = 'var(--pastel-red)';
+                        scoreFill.style.width = '100%';
+                    } else if (percent < 100) {
+                        scoreFill.style.backgroundColor = 'var(--pastel-yellow)';
+                    } else {
+                        scoreFill.style.backgroundColor = 'var(--pastel-green)';
+                    }
+
+                    // Show first failing testcase
+                    if (firstFail) {
+                        let failDiv = container.querySelector('.fail-info');
+                        if (!failDiv) {
+                            failDiv = document.createElement('div');
+                            failDiv.className = 'fail-info';
+                            container.appendChild(failDiv);
+                        }
+                        failDiv.innerHTML = `
+          <strong>First failing testcase:</strong><br>
+          Input: ${firstFail.input.join(', ')}<br>
+          Your Output: ${firstFail.userResult}<br>
+          Expected: ${firstFail.output}
+        `;
+                    } else {
+                        const failDiv = container.querySelector('.fail-info');
+                        if (failDiv) failDiv.remove();
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
